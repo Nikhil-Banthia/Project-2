@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>add or delete data</title>
+    <style>
+        .form input {
+            display: block;
+            padding: 10px;
+            margin: 2px;
+            position: relative;
+            left: 10px;
+        }
+
+        .card {
+            background-color: rgb(0, 0, 0);
+            color: rgb(180, 54, 54);
+            display: inline-block;
+            width: fit-content;
+            padding: 20px;
+
+            margin: 10px;
+        }
+
+        .name {
+            font-size: 30px;
+        }
+
+        .lead {
+            font-size: 25px;
+        }
+
+        .collection {
+            font-size: 21px;
+        }
+
+        .action {
+            font-size: 5px;
+            display: block;
+
+        }
+
+        #editbtn {
+            display: none;
+            padding: 10px;
+            margin: 2px;
+            font-size: 10px;
+        }
+
+        #addbtn {
+            display: block;
+            padding: 5px;
+            margin: 2px;
+            width: 80px;
+            position: relative;
+            left: 60px;
+            top: 6px;
+        }
+
+        .btn {
+            padding: 5px;
+            margin: 2px;
+            width: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form">
+        <input type="text" placeholder="movie name" id="name">
+        <input type="text" placeholder="lead actor" id="lead">
+        <input type="text" placeholder="box office collection" id="collection">
+        <button id="addbtn" onclick="addmovie()">add movie</button>
+        <div id="editbtn">
+            <button class='btn' onclick="read()">📄</button>
+            <button class='btn' onclick="cancle()">❌</button>
+        </div>
+    </div>
+    <div id="parent"></div>
+    <script>
+        globalindex = null
+        imdb = [
+            {
+                name: "Iron man",
+                lead: "Tony Stark",
+                collection: "110 MIL"
+            },
+            {
+                name: "Spider Man",
+                lead: "Peter Parker",
+                collection: "45 MIL"
+            },
+            {
+                name: "Hulk",
+                lead: "Bruce Banner",
+                collection: "110 MIL"
+            },
+            {
+                name: "Black Widow",
+                lead: "Natasha",
+                collection: "150 MIL"
+            }
+        ]
+        nameEle = document.getElementById("name")
+        leadEle = document.getElementById("lead")
+        parentEle = document.getElementById("parent")
+        collectionEle = document.getElementById("collection")
+        editbtnEle = document.getElementById("editbtn")
+        addbtnEle = document.getElementById("addbtn")
+        rendermovie()
+        function addmovie() {
+            movie = { name: nameEle.value, lead: leadEle.value, collection: collectionEle.value }
+            imdb.push(movie)
+            console.log("IMDV", imdb)
+            rendermovie()
+            nameEle.value = ""
+            collectionEle.value = ""
+            leadEle.value = ""
+        }
+        function rendermovie() {
+            parentEle.innerHTML = ''
+            for (i = 0; i < imdb.length; i++) {
+                parentEle.innerHTML += `<div class='card'>
+                        
+                        <div class='name'>${imdb[i].name}</div>
+                        <div class='lead'>${imdb[i].lead}</div>
+                        <div class='collection'>${imdb[i].collection}</div>
+                        <div class='action'>
+                            <button class='btn' onclick='editmovie(${i})'>✏️</button>
+                            <button class='btn' onclick='deletemovie(${i})'>🗑️</button>
+                            </div>
+                        </div>`
+            }
+        }
+        function editmovie(index) {
+            globalindex = index
+            nameEle.value = imdb[index].name
+            leadEle.value = imdb[index].lead
+            collectionEle.value = imdb[index].collection
+            addbtnEle.style.display = 'none'
+            editbtnEle.style.display = 'block'
+        }
+        function deletemovie(index) {
+            editbtn.style.display = 'block'
+            opt = confirm(`are you sure that you want to delete'${imdb[index].name}'`)
+            if (opt) {
+                imdb.splice(index, 1)
+                editbtnEle.style.display = 'none'
+                rendermovie()
+            }
+            else{
+                editbtnEle.style.display = 'none'
+            }
+        }
+        function read() {
+
+            imdb[globalindex].name = nameEle.value
+            imdb[globalindex].lead = leadEle.value
+            imdb[globalindex].collection = collectionEle.value
+            rendermovie()
+            cancle()
+            nameEle.value = ""
+            collectionEle.value = ""
+            leadEle.value = ""
+        }
+        function cancle() {
+            nameEle.value = ""
+            collectionEle.value = ""
+            leadEle.value = ""
+            addbtnEle.style.display = 'block'
+            editbtnEle.style.display = 'none'
+        }
+
+    </script>
+</body>
+
+</html>
